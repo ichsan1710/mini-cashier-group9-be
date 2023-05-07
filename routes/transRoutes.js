@@ -3,9 +3,9 @@ const { transController } = require('../controllers')
 
 const router = express.Router()
 
-router.get('/gross', transController.gross)
-router.get('/transaction', transController.trans)
-router.get('/topOne', transController.topOne)
-router.get('/topFive', transController.topFive)
+router.post('/gross', transController.gross)
+router.post('/transaction', transController.trans)
+router.post('/topone', transController.topOne)
+router.post('/topfive', transController.topFive)
 
 module.exports = router

@@ -4,31 +4,32 @@ const jwt = require('jsonwebtoken')
 
 module.exports = {
     register: async (req, res) => {
-        const { username, email, password } = req.body
-
-        let getEmailQuery = `SELECT * FROM users WHERE email_user=${db.escape(email)}`
+        const { nama_user, email_user, pw_user } = req.body
+            // console.log(`print email: ${db.escape(email_user)}`)
+        let getEmailQuery = `SELECT * FROM users WHERE email_user=${db.escape(email_user)}`
         let isEmailExist = await query(getEmailQuery)
         if (isEmailExist.length > 0) {
             return res.status(400).send({ message: 'Email has been used' })
         }
 
         const salt = await bcrypt.genSalt(10)
-        const hashPassword = await bcrypt.hash(password, salt)
+        const hashPassword = await bcrypt.hash(pw_user, salt)
 
-        let addUserQuery = `INSERT INTO users VALUES (null, ${db.escape(username)}, ${db.escape(email)}, ${db.escape(hashPassword)}, true)`
+        let addUserQuery = `INSERT INTO users VALUES (null, ${db.escape(nama_user)}, ${db.escape(email_user)}, ${db.escape(hashPassword)}, true)`
         let addUserResult = await query(addUserQuery)
         return res.status(200).send({ data: addUserResult, message: "Register success" })
     },
     login: async (req, res) => {
 
         try {
-            const { email, password } = req.body
-            const isEmailExist = await query(`SELECT * FROM users WHERE email_user=${db.escape(email)}`)
+            const { email_user, pw_user } = req.body
+            const isEmailExist = await query(`SELECT * FROM users WHERE email_user=${db.escape(email_user)}`)
             if (isEmailExist.length == 0) {
                 return res.status(400).send({ message: "Email or password is invalid" })
             }
 
-            const isValid = await bcrypt.compare(password, isEmailExist[0].password)
+            const isValid = await bcrypt.compare(pw_user, isEmailExist[0].pw_user)
+
 
             if (!isValid) {
                 return res.status(400).send({ message: "Email or password is invalid" })

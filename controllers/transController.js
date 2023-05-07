@@ -47,7 +47,7 @@ module.exports = {
     if(topOneValue === 0 || topOneValue === null) {
         return res.status(400).send({message: "No top product data retrieved"})
     }
-    return res.status(200).send({topOneData: topOne, message: "Top one product retrieved successfully"})
+    return res.status(200).send({topOneData: topOne[0], message: "Top one product retrieved successfully"})
     },
 
     topFive: async ( req, res ) => {
